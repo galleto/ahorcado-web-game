@@ -1,0 +1,1364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ahorcado - Juego en Español</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', monospace;
+            background: 
+                repeating-linear-gradient(
+                    transparent,
+                    transparent 24px,
+                    #d4d4d4 24px,
+                    #d4d4d4 25px
+                ),
+                repeating-linear-gradient(
+                    90deg,
+                    transparent,
+                    transparent 24px,
+                    #d4d4d4 24px,
+                    #d4d4d4 25px
+                ),
+                #fff;
+            background-size: 25px 25px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+
+        /* Contenedor principal */
+        .notebook-bg {
+            background: transparent;
+            padding: 20px;
+            max-width: 1000px;
+            width: 100%;
+            max-height: 95vh;
+            overflow-y: auto;
+        }
+
+        /* Responsive para móviles */
+        @media (max-width: 768px) {
+            .notebook-bg {
+                padding: 15px;
+                max-height: 100vh;
+            }
+        }
+
+        /* Splash Screen */
+        #splash-screen {
+            text-align: center;
+            position: relative;
+        }
+
+        #splash-screen h1 {
+            font-size: 4em;
+            color: #2c3e50;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            #splash-screen h1 {
+                font-size: 2.5em;
+                margin: 20px 0;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #splash-screen h1 {
+                font-size: 2em;
+                margin: 15px 0;
+                padding: 10px;
+            }
+        }
+
+        /* Carrusel de palabras */
+        .word-carousel {
+            height: 50px;
+            overflow: hidden;
+            position: relative;
+            opacity: 0.4;
+        }
+
+        .word-carousel-top {
+            margin-bottom: 20px;
+        }
+
+        .word-carousel-bottom {
+            margin-top: 20px;
+        }
+
+        .word-carousel-inner {
+            display: flex;
+            flex-direction: column;
+            animation: scroll-words 60s linear infinite;
+        }
+
+        .word-carousel-inner.reverse {
+            animation: scroll-words-reverse 60s linear infinite;
+        }
+
+        .carousel-word {
+            font-size: 1.5em;
+            color: #7f8c8d;
+            font-weight: bold;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+        }
+
+        @media (max-width: 768px) {
+            .word-carousel {
+                height: 40px;
+            }
+            
+            .carousel-word {
+                font-size: 1.2em;
+                height: 40px;
+            }
+            
+            .word-carousel-top {
+                margin-bottom: 15px;
+            }
+            
+            .word-carousel-bottom {
+                margin-top: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .word-carousel {
+                height: 35px;
+            }
+            
+            .carousel-word {
+                font-size: 1em;
+                height: 35px;
+            }
+        }
+
+        @keyframes scroll-words {
+            0% {
+                transform: translateY(0);
+            }
+            100% {
+                transform: translateY(-50%);
+            }
+        }
+
+        @keyframes scroll-words-reverse {
+            0% {
+                transform: translateY(-50%);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        .word-carousel:hover .word-carousel-inner {
+            animation-play-state: paused;
+        }
+
+        .btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 1.2em;
+            font-family: 'Courier New', monospace;
+            cursor: pointer;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+
+        @media (max-width: 768px) {
+            .btn {
+                padding: 12px 25px;
+                font-size: 1.1em;
+                margin: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .btn {
+                padding: 10px 20px;
+                font-size: 1em;
+                margin: 5px;
+                width: 90%;
+                max-width: 250px;
+            }
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+
+        .btn-secondary {
+            background: #95a5a6;
+        }
+
+        .btn-secondary:hover {
+            background: #7f8c8d;
+        }
+
+        /* Instrucciones */
+        #instructions {
+            display: none;
+        }
+
+        #instructions h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        #instructions p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #34495e;
+            font-size: 1em;
+        }
+
+        @media (max-width: 768px) {
+            #instructions h2 {
+                font-size: 1.6em;
+                margin-bottom: 15px;
+            }
+            
+            #instructions p {
+                font-size: 0.95em;
+                line-height: 1.6;
+                margin-bottom: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #instructions h2 {
+                font-size: 1.4em;
+                margin-bottom: 12px;
+            }
+            
+            #instructions p {
+                font-size: 0.9em;
+                line-height: 1.5;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Juego */
+        #game-screen {
+            display: none;
+        }
+
+        .game-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .game-header h2 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            font-size: 1.1em;
+            color: #34495e;
+        }
+
+        @media (max-width: 768px) {
+            .game-header h2 {
+                font-size: 1.5em;
+            }
+            
+            .stats {
+                gap: 15px;
+                font-size: 0.95em;
+            }
+            
+            .stat {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-header h2 {
+                font-size: 1.3em;
+            }
+            
+            .stats {
+                gap: 10px;
+            }
+            
+            .stat {
+                font-size: 0.9em;
+            }
+        }
+
+        .stat .correct {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .stat .wrong {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        /* Canvas de la horca */
+        #hangman-canvas {
+            display: block;
+            margin: 0 auto 20px;
+            border: 2px solid #2c3e50;
+            border-radius: 5px;
+            background: white;
+            max-width: 100%;
+            height: auto;
+        }
+
+        @media (max-width: 768px) {
+            #hangman-canvas {
+                width: 250px;
+                height: 250px;
+                margin-bottom: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #hangman-canvas {
+                width: 200px;
+                height: 200px;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* Palabra */
+        .word-display {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .letter-box {
+            width: 40px;
+            height: 50px;
+            border-bottom: 3px solid #2c3e50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 768px) {
+            .word-display {
+                gap: 8px;
+                margin: 20px 0;
+            }
+            
+            .letter-box {
+                width: 35px;
+                height: 45px;
+                font-size: 1.8em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .word-display {
+                gap: 6px;
+                margin: 15px 0;
+            }
+            
+            .letter-box {
+                width: 28px;
+                height: 38px;
+                font-size: 1.5em;
+                border-bottom: 2px solid #2c3e50;
+            }
+        }
+
+        /* Letras usadas */
+        .used-letters {
+            text-align: center;
+            margin: 20px 0;
+            color: #7f8c8d;
+            font-size: 1em;
+        }
+
+        .used-letters span {
+            margin: 0 5px;
+            font-size: 1.1em;
+        }
+
+        /* Pista */
+        .hint-section {
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff3cd;
+            border: 2px dashed #ffc107;
+            border-radius: 10px;
+        }
+
+        .hint-section strong {
+            color: #856404;
+        }
+
+        .hint-section span {
+            color: #856404;
+            font-size: 1.1em;
+        }
+
+        @media (max-width: 768px) {
+            .used-letters {
+                font-size: 0.9em;
+                margin: 15px 0;
+            }
+            
+            .used-letters span {
+                font-size: 1em;
+                margin: 0 3px;
+            }
+            
+            .hint-section {
+                padding: 12px;
+                margin: 15px 0;
+            }
+            
+            .hint-section span {
+                font-size: 1em;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .used-letters {
+                font-size: 0.85em;
+                margin: 10px 0;
+            }
+            
+            .used-letters span {
+                font-size: 0.95em;
+                margin: 0 2px;
+            }
+            
+            .hint-section {
+                padding: 10px;
+                margin: 10px 0;
+                font-size: 0.9em;
+            }
+            
+            .hint-section span {
+                font-size: 0.95em;
+            }
+        }
+
+        /* Teclado */
+        .keyboard {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            align-items: center;
+        }
+
+        .keyboard-row {
+            display: flex;
+            gap: 6px;
+            justify-content: center;
+        }
+
+        .keyboard-row:nth-child(2) {
+            margin-left: 20px;
+        }
+
+        .keyboard-row:nth-child(3) {
+            margin-left: 40px;
+        }
+
+        .key {
+            padding: 15px 12px;
+            background: #ecf0f1;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: #2c3e50;
+            min-height: 50px;
+            min-width: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .keyboard {
+                gap: 6px;
+                margin-top: 20px;
+                max-width: 100%;
+            }
+
+            .keyboard-row {
+                gap: 5px;
+            }
+
+            .keyboard-row:nth-child(2) {
+                margin-left: 15px;
+            }
+
+            .keyboard-row:nth-child(3) {
+                margin-left: 30px;
+            }
+            
+            .key {
+                padding: 12px 10px;
+                font-size: 1.1em;
+                min-height: 45px;
+                min-width: 38px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .keyboard {
+                gap: 4px;
+                margin-top: 15px;
+            }
+
+            .keyboard-row {
+                gap: 3px;
+            }
+
+            .keyboard-row:nth-child(2) {
+                margin-left: 10px;
+            }
+
+            .keyboard-row:nth-child(3) {
+                margin-left: 20px;
+            }
+            
+            .key {
+                padding: 10px 6px;
+                font-size: 0.95em;
+                min-height: 40px;
+                min-width: 30px;
+                border-width: 1px;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .keyboard-row {
+                gap: 2px;
+            }
+
+            .keyboard-row:nth-child(2) {
+                margin-left: 8px;
+            }
+
+            .keyboard-row:nth-child(3) {
+                margin-left: 15px;
+            }
+
+            .key {
+                padding: 8px 4px;
+                font-size: 0.85em;
+                min-height: 35px;
+                min-width: 26px;
+            }
+        }
+
+        .key:hover:not(.disabled) {
+            background: #d5dbdb;
+            transform: scale(1.05);
+        }
+
+        .key.correct {
+            background: #2ecc71;
+            color: white;
+            border-color: #27ae60;
+        }
+
+        .key.wrong {
+            background: #e74c3c;
+            color: white;
+            border-color: #c0392b;
+        }
+
+        .key.disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        /* Modal de fin de juego */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            text-align: center;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .modal-content p {
+            margin: 15px 0;
+            font-size: 1.1em;
+            color: #34495e;
+        }
+
+        .modal-content input {
+            width: 100%;
+            padding: 10px;
+            margin: 15px 0;
+            border: 2px solid #bdc3c7;
+            border-radius: 5px;
+            font-size: 1em;
+            font-family: 'Courier New', monospace;
+        }
+
+        @media (max-width: 768px) {
+            .modal-content {
+                padding: 30px 20px;
+                max-width: 95%;
+            }
+            
+            .modal-content h2 {
+                font-size: 1.8em;
+                margin-bottom: 15px;
+            }
+            
+            .modal-content p {
+                font-size: 1em;
+                margin: 12px 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .modal {
+                padding: 10px;
+            }
+            
+            .modal-content {
+                padding: 25px 15px;
+            }
+            
+            .modal-content h2 {
+                font-size: 1.5em;
+                margin-bottom: 12px;
+            }
+            
+            .modal-content p {
+                font-size: 0.95em;
+                margin: 10px 0;
+            }
+            
+            .modal-content input {
+                padding: 8px;
+                font-size: 0.95em;
+            }
+        }
+
+        .leaderboard {
+            margin-top: 20px;
+            text-align: left;
+        }
+
+        .leaderboard h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .leaderboard-entry {
+            padding: 8px;
+            margin: 5px 0;
+            background: #ecf0f1;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.95em;
+        }
+
+        @media (max-width: 480px) {
+            .leaderboard h3 {
+                font-size: 1.1em;
+            }
+            
+            .leaderboard-entry {
+                padding: 6px;
+                font-size: 0.85em;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="notebook-bg">
+        <!-- Splash Screen -->
+        <div id="splash-screen">
+            <div class="word-carousel word-carousel-top">
+                <div class="word-carousel-inner" id="word-carousel-top">
+                    <!-- Las palabras se generan dinámicamente -->
+                </div>
+            </div>
+            
+            <h1>AHORCADO</h1>
+            
+            <div class="word-carousel word-carousel-bottom">
+                <div class="word-carousel-inner reverse" id="word-carousel-bottom">
+                    <!-- Las palabras se generan dinámicamente -->
+                </div>
+            </div>
+            
+            <button class="btn" onclick="showInstructions()">CÓMO SE JUEGA</button>
+            <button class="btn" onclick="startGame()">JUGAR</button>
+        </div>
+
+        <!-- Instrucciones -->
+        <div id="instructions">
+            <h2>COMO SE JUEGA</h2>
+            <p><strong>Objetivo:</strong> Adivina la palabra oculta antes de completar el dibujo del ahorcado.</p>
+            <p><strong>Reglas:</strong></p>
+            <p>• Tienes 6 oportunidades para equivocarte.</p>
+            <p>• Selecciona letras usando el teclado en pantalla o tu teclado físico.</p>
+            <p>• Las letras correctas se mostrarán en verde.</p>
+            <p>• Las letras incorrectas se mostrarán en rojo y agregarán una parte al ahorcado.</p>
+            <p>• ¡Intenta adivinar la palabra antes de que se complete el dibujo!</p>
+            <button class="btn" onclick="startGame()">EMPEZAR A JUGAR</button>
+            <button class="btn btn-secondary" onclick="showSplash()">VOLVER</button>
+        </div>
+
+        <!-- Pantalla del juego -->
+        <div id="game-screen">
+            <div class="game-header">
+                <h2>AHORCADO</h2>
+                <div class="stats">
+                    <div class="stat">Aciertos: <span class="correct" id="correct-count">0</span></div>
+                    <div class="stat">Errores: <span class="wrong" id="wrong-count">0</span></div>
+                    <div class="stat">Intentos restantes: <span id="attempts-left">6</span></div>
+                </div>
+            </div>
+
+            <canvas id="hangman-canvas" width="300" height="300"></canvas>
+
+            <div class="word-display" id="word-display"></div>
+
+            <div class="hint-section" style="text-align: center; margin: 20px 0; padding: 15px; background: #fff3cd; border: 2px dashed #ffc107; border-radius: 10px;">
+                <strong style="color: #856404;">Pista:</strong> 
+                <span id="hint-text" style="color: #856404; font-size: 1.1em;"></span>
+            </div>
+
+            <div class="used-letters">
+                <strong>Letras usadas:</strong> <span id="used-letters"></span>
+            </div>
+
+            <div class="keyboard" id="keyboard"></div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-secondary" onclick="showSplash()">VOLVER AL MENÚ</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de fin de juego -->
+    <div class="modal" id="game-over-modal">
+        <div class="modal-content">
+            <h2 id="result-title"></h2>
+            <p id="result-message"></p>
+            <p id="result-stats"></p>
+            <input type="text" id="player-name" placeholder="Ingresa tu nombre" maxlength="20">
+            <button class="btn" onclick="saveScore()">GUARDAR PUNTUACIÓN</button>
+            <button class="btn btn-secondary" onclick="playAgain()">JUGAR DE NUEVO</button>
+            <div class="leaderboard" id="leaderboard">
+                <h3>MARCADOR</h3>
+                <div id="leaderboard-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const palabras = [
+            {word: "Adios", hint: "Lo que dices cuando te vas"},
+            {word: "Agua", hint: "Líquido transparente que bebes"},
+            {word: "Ahora", hint: "En este momento"},
+            {word: "Amar", hint: "Sentir cariño profundo"},
+            {word: "Amigo", hint: "Persona con la que te llevas bien"},
+            {word: "Aprender", hint: "Adquirir conocimientos"},
+            {word: "Arbol", hint: "Planta grande con tronco"},
+            {word: "Autobus", hint: "Vehículo de transporte público"},
+            {word: "Ayer", hint: "El día antes de hoy"},
+            {word: "Boligrafo", hint: "Instrumento para escribir con tinta"},
+            {word: "Bonito", hint: "Algo agradable a la vista"},
+            {word: "Bueno", hint: "Lo contrario de malo"},
+            {word: "Cabeza", hint: "Parte superior del cuerpo"},
+            {word: "Calle", hint: "Vía pública en la ciudad"},
+            {word: "Cama", hint: "Mueble donde duermes"},
+            {word: "Cancion", hint: "Pieza musical con letra"},
+            {word: "Casa", hint: "Lugar donde vives"},
+            {word: "Ciudad", hint: "Área urbana grande"},
+            {word: "Coche", hint: "Vehículo de cuatro ruedas"},
+            {word: "Colegio", hint: "Lugar donde estudian niños"},
+            {word: "Comida", hint: "Lo que comes para alimentarte"},
+            {word: "Contento", hint: "Sentirse feliz"},
+            {word: "Correr", hint: "Moverse rápido con las piernas"},
+            {word: "Cosa", hint: "Objeto o asunto indefinido"},
+            {word: "Chica", hint: "Mujer joven"},
+            {word: "Chico", hint: "Hombre joven"},
+            {word: "Dar", hint: "Entregar algo a alguien"},
+            {word: "Decir", hint: "Expresar con palabras"},
+            {word: "Deporte", hint: "Actividad física y competitiva"},
+            {word: "Dia", hint: "Período de 24 horas"},
+            {word: "Dificil", hint: "Lo contrario de fácil"},
+            {word: "Dinero", hint: "Monedas y billetes"},
+            {word: "Facil", hint: "Que no requiere esfuerzo"},
+            {word: "Familia", hint: "Grupo de personas emparentadas"},
+            {word: "Feo", hint: "Lo contrario de bonito"},
+            {word: "Fiesta", hint: "Celebración con gente"},
+            {word: "Flor", hint: "Parte colorida de las plantas"},
+            {word: "Fuerte", hint: "Que tiene mucha fuerza"},
+            {word: "Galleta", hint: "Dulce crujiente para comer"},
+            {word: "Gente", hint: "Conjunto de personas"},
+            {word: "Grande", hint: "De mucho tamaño"},
+            {word: "Gustar", hint: "Agradar o complacer"},
+            {word: "Haber", hint: "Verbo auxiliar"},
+            {word: "Habitacion", hint: "Cuarto de una casa"},
+            {word: "Hablar", hint: "Comunicarse con palabras"},
+            {word: "Hacer", hint: "Realizar o ejecutar algo"},
+            {word: "Hermana", hint: "Hija de tus mismos padres"},
+            {word: "Hermano", hint: "Hijo de tus mismos padres"},
+            {word: "Hija", hint: "Descendiente femenina"},
+            {word: "Hijo", hint: "Descendiente masculino"},
+            {word: "Hogar", hint: "Casa donde vive la familia"},
+            {word: "Hola", hint: "Saludo informal"},
+            {word: "Hombre", hint: "Persona adulta masculina"},
+            {word: "Hoy", hint: "El día presente"},
+            {word: "Inteligente", hint: "Persona muy lista"},
+            {word: "Ir", hint: "Moverse de un lugar a otro"},
+            {word: "Jugar", hint: "Divertirse con juegos"},
+            {word: "Lapiz", hint: "Instrumento para escribir de grafito"},
+            {word: "Leer", hint: "Interpretar textos escritos"},
+            {word: "Libro", hint: "Conjunto de hojas con texto"},
+            {word: "Llorar", hint: "Derramar lágrimas"},
+            {word: "Madre", hint: "Mujer que tiene hijos"},
+            {word: "Malo", hint: "Lo contrario de bueno"},
+            {word: "Mañana", hint: "El día después de hoy"},
+            {word: "Mar", hint: "Gran masa de agua salada"},
+            {word: "Mujer", hint: "Persona adulta femenina"},
+            {word: "Musica", hint: "Arte de combinar sonidos"},
+            {word: "Nino", hint: "Persona de corta edad"},
+            {word: "Noche", hint: "Período de oscuridad"},
+            {word: "Nombre", hint: "Palabra que identifica a una persona"},
+            {word: "Nuevo", hint: "Recién hecho o comprado"},
+            {word: "Numero", hint: "Símbolo matemático"},
+            {word: "Nunca", hint: "En ningún momento"},
+            {word: "Padre", hint: "Hombre que tiene hijos"},
+            {word: "Pagar", hint: "Dar dinero por algo"},
+            {word: "Papelera", hint: "Recipiente para basura"},
+            {word: "Parar", hint: "Detenerse o cesar"},
+            {word: "Pensar", hint: "Reflexionar con la mente"},
+            {word: "Pequeno", hint: "De poco tamaño"},
+            {word: "Pero", hint: "Conjunción adversativa"},
+            {word: "Poner", hint: "Colocar algo en un lugar"},
+            {word: "Preguntar", hint: "Hacer una pregunta"},
+            {word: "Puerta", hint: "Entrada a una habitación"},
+            {word: "Rapido", hint: "Que se mueve velozmente"},
+            {word: "Reloj", hint: "Aparato que marca la hora"},
+            {word: "Responder", hint: "Contestar a una pregunta"},
+            {word: "Ropa", hint: "Prendas que vistes"},
+            {word: "Sentar", hint: "Poner el cuerpo sobre algo"},
+            {word: "Sentir", hint: "Experimentar emociones"},
+            {word: "Ser", hint: "Verbo de existencia"},
+            {word: "Si", hint: "Afirmación o aprobación"},
+            {word: "Silla", hint: "Mueble para sentarse"},
+            {word: "Sitio", hint: "Lugar o espacio"},
+            {word: "Sonrisa", hint: "Gesto de alegría en la cara"},
+            {word: "Tarde", hint: "Período entre mediodía y noche"},
+            {word: "Telefono", hint: "Aparato para llamar"},
+            {word: "Television", hint: "Aparato para ver programas"},
+            {word: "Tienda", hint: "Local donde se vende"},
+            {word: "Trabajar", hint: "Realizar una actividad laboral"},
+            {word: "Venir", hint: "Moverse hacia aquí"},
+            {word: "Zapato", hint: "Calzado que protege el pie"},
+            {word: "Año", hint: "Período de 12 meses"},
+            {word: "Baño", hint: "Habitación con ducha o bañera"},
+            {word: "Niña", hint: "Persona joven de sexo femenino"},
+            {word: "Montaña", hint: "Elevación natural del terreno"},
+            {word: "Sueño", hint: "Estado de reposo o deseo"},
+            {word: "Pequeño", hint: "De tamaño reducido"},
+            {word: "Español", hint: "Idioma que hablas ahora"},
+            {word: "Enseñar", hint: "Transmitir conocimientos"},
+            {word: "Compañero", hint: "Persona que acompaña"}
+        ];
+
+        let currentWord = '';
+        let currentHint = '';
+        let guessedLetters = [];
+        let wrongGuesses = 0;
+        let correctGuesses = 0;
+        let maxWrong = 6;
+        let gameActive = false;
+        let playedWords = JSON.parse(localStorage.getItem('ahorcado-played-words') || '[]');
+
+        // Sonidos del juego usando Web Audio API
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            if (type === 'correct') {
+                oscillator.frequency.value = 523.25; // Do
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } else if (type === 'wrong') {
+                oscillator.frequency.value = 196; // Sol grave
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.5);
+            } else if (type === 'win') {
+                // Melodía de victoria
+                const notes = [523.25, 587.33, 659.25, 783.99];
+                notes.forEach((freq, i) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.2, audioContext.currentTime + i * 0.15);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.15 + 0.3);
+                    osc.start(audioContext.currentTime + i * 0.15);
+                    osc.stop(audioContext.currentTime + i * 0.15 + 0.3);
+                });
+            } else if (type === 'lose') {
+                // Melodía de derrota
+                const notes = [392, 349.23, 329.63, 293.66];
+                notes.forEach((freq, i) => {
+                    const osc = audioContext.createOscillator();
+                    const gain = audioContext.createGain();
+                    osc.connect(gain);
+                    gain.connect(audioContext.destination);
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.2, audioContext.currentTime + i * 0.2);
+                    gain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + i * 0.2 + 0.4);
+                    osc.start(audioContext.currentTime + i * 0.2);
+                    osc.stop(audioContext.currentTime + i * 0.2 + 0.4);
+                });
+            }
+        }
+
+        const canvas = document.getElementById('hangman-canvas');
+        const ctx = canvas.getContext('2d');
+
+        // Inicializar carrusel de palabras
+        function initWordCarousel() {
+            const carouselTop = document.getElementById('word-carousel-top');
+            const carouselBottom = document.getElementById('word-carousel-bottom');
+            
+            // Seleccionar palabras aleatorias para cada carrusel
+            const shuffledTop = [...palabras].sort(() => Math.random() - 0.5).slice(0, 20);
+            const shuffledBottom = [...palabras].sort(() => Math.random() - 0.5).slice(0, 20);
+            
+            // Duplicar para efecto infinito
+            const wordsTop = [...shuffledTop, ...shuffledTop];
+            const wordsBottom = [...shuffledBottom, ...shuffledBottom];
+            
+            carouselTop.innerHTML = wordsTop.map(w => 
+                `<div class="carousel-word">${w.word}</div>`
+            ).join('');
+            
+            carouselBottom.innerHTML = wordsBottom.map(w => 
+                `<div class="carousel-word">${w.word}</div>`
+            ).join('');
+        }
+
+        // Inicializar el carrusel cuando carga la página
+        document.addEventListener('DOMContentLoaded', initWordCarousel);
+
+        function showSplash() {
+            document.getElementById('splash-screen').style.display = 'block';
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'none';
+        }
+
+        function showInstructions() {
+            document.getElementById('splash-screen').style.display = 'none';
+            document.getElementById('instructions').style.display = 'block';
+            document.getElementById('game-screen').style.display = 'none';
+        }
+
+        function startGame() {
+            document.getElementById('splash-screen').style.display = 'none';
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('game-screen').style.display = 'block';
+            
+            resetGame();
+        }
+
+        function resetGame() {
+            // Filtrar palabras disponibles (que no se han jugado)
+            let availableWords = palabras.filter(w => !playedWords.includes(w.word));
+            
+            // Si ya jugamos todas las palabras, resetear la lista
+            if (availableWords.length === 0) {
+                playedWords = [];
+                localStorage.setItem('ahorcado-played-words', JSON.stringify([]));
+                availableWords = palabras;
+            }
+            
+            // Seleccionar palabra aleatoria de las disponibles
+            const randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
+            
+            // Normalizar la palabra para asegurar que Ñ se maneje correctamente
+            currentWord = randomWord.word.toUpperCase().normalize('NFC');
+            currentHint = randomWord.hint;
+            
+            // Agregar a la lista de palabras jugadas
+            playedWords.push(randomWord.word);
+            localStorage.setItem('ahorcado-played-words', JSON.stringify(playedWords));
+            
+            guessedLetters = [];
+            wrongGuesses = 0;
+            correctGuesses = 0;
+            gameActive = true;
+
+            document.getElementById('correct-count').textContent = '0';
+            document.getElementById('wrong-count').textContent = '0';
+            document.getElementById('attempts-left').textContent = maxWrong;
+            document.getElementById('used-letters').textContent = '';
+            document.getElementById('hint-text').textContent = currentHint;
+
+            createKeyboard();
+            updateWordDisplay();
+            drawHangman();
+        }
+
+        function createKeyboard() {
+            const keyboard = document.getElementById('keyboard');
+            keyboard.innerHTML = '';
+            
+            // Distribución QWERTY en 3 filas
+            const rows = [
+                'QWERTYUIOP',
+                'ASDFGHJKLÑ',
+                'ZXCVBNM'
+            ];
+            
+            rows.forEach(row => {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'keyboard-row';
+                
+                for (let letter of row) {
+                    const key = document.createElement('button');
+                    key.className = 'key';
+                    key.textContent = letter;
+                    key.onclick = () => guessLetter(letter);
+                    key.id = 'key-' + letter;
+                    rowDiv.appendChild(key);
+                }
+                
+                keyboard.appendChild(rowDiv);
+            });
+        }
+
+        function updateWordDisplay() {
+            const display = document.getElementById('word-display');
+            display.innerHTML = '';
+            
+            for (let letter of currentWord) {
+                const box = document.createElement('div');
+                box.className = 'letter-box';
+                if (guessedLetters.includes(letter)) {
+                    box.textContent = letter;
+                }
+                display.appendChild(box);
+            }
+        }
+
+        function guessLetter(letter) {
+            if (!gameActive || guessedLetters.includes(letter)) return;
+
+            guessedLetters.push(letter);
+            const key = document.getElementById('key-' + letter);
+            key.classList.add('disabled');
+
+            if (currentWord.includes(letter)) {
+                key.classList.add('correct');
+                correctGuesses++;
+                document.getElementById('correct-count').textContent = correctGuesses;
+                playSound('correct');
+            } else {
+                key.classList.add('wrong');
+                wrongGuesses++;
+                document.getElementById('wrong-count').textContent = wrongGuesses;
+                document.getElementById('attempts-left').textContent = maxWrong - wrongGuesses;
+                drawHangman();
+                playSound('wrong');
+            }
+
+            updateWordDisplay();
+            updateUsedLetters();
+            checkGameStatus();
+        }
+
+        function updateUsedLetters() {
+            document.getElementById('used-letters').textContent = guessedLetters.join(', ');
+        }
+
+        function drawHangman() {
+            // Ajustar tamaño del canvas según el ancho de la pantalla
+            const canvas = document.getElementById('hangman-canvas');
+            if (window.innerWidth <= 480) {
+                canvas.width = 200;
+                canvas.height = 200;
+            } else if (window.innerWidth <= 768) {
+                canvas.width = 250;
+                canvas.height = 250;
+            } else {
+                canvas.width = 300;
+                canvas.height = 300;
+            }
+            
+            const ctx = canvas.getContext('2d');
+            const scale = canvas.width / 300; // Factor de escala basado en el tamaño original
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.lineWidth = 3 * scale;
+            ctx.strokeStyle = '#2c3e50';
+
+            // Base
+            ctx.beginPath();
+            ctx.moveTo(20 * scale, 280 * scale);
+            ctx.lineTo(180 * scale, 280 * scale);
+            ctx.stroke();
+
+            // Poste vertical
+            ctx.beginPath();
+            ctx.moveTo(60 * scale, 280 * scale);
+            ctx.lineTo(60 * scale, 20 * scale);
+            ctx.stroke();
+
+            // Poste horizontal
+            ctx.beginPath();
+            ctx.moveTo(60 * scale, 20 * scale);
+            ctx.lineTo(180 * scale, 20 * scale);
+            ctx.stroke();
+
+            // Cuerda
+            ctx.beginPath();
+            ctx.moveTo(180 * scale, 20 * scale);
+            ctx.lineTo(180 * scale, 50 * scale);
+            ctx.stroke();
+
+            if (wrongGuesses > 0) {
+                // Cabeza
+                ctx.beginPath();
+                ctx.arc(180 * scale, 70 * scale, 20 * scale, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            if (wrongGuesses > 1) {
+                // Torso
+                ctx.beginPath();
+                ctx.moveTo(180 * scale, 90 * scale);
+                ctx.lineTo(180 * scale, 160 * scale);
+                ctx.stroke();
+            }
+
+            if (wrongGuesses > 2) {
+                // Brazo izquierdo
+                ctx.beginPath();
+                ctx.moveTo(180 * scale, 110 * scale);
+                ctx.lineTo(150 * scale, 140 * scale);
+                ctx.stroke();
+            }
+
+            if (wrongGuesses > 3) {
+                // Brazo derecho
+                ctx.beginPath();
+                ctx.moveTo(180 * scale, 110 * scale);
+                ctx.lineTo(210 * scale, 140 * scale);
+                ctx.stroke();
+            }
+
+            if (wrongGuesses > 4) {
+                // Pierna izquierda
+                ctx.beginPath();
+                ctx.moveTo(180 * scale, 160 * scale);
+                ctx.lineTo(150 * scale, 220 * scale);
+                ctx.stroke();
+            }
+
+            if (wrongGuesses > 5) {
+                // Pierna derecha
+                ctx.beginPath();
+                ctx.moveTo(180 * scale, 160 * scale);
+                ctx.lineTo(210 * scale, 220 * scale);
+                ctx.stroke();
+            }
+        }
+
+        function checkGameStatus() {
+            const wordComplete = currentWord.split('').every(letter => guessedLetters.includes(letter));
+
+            if (wordComplete) {
+                gameActive = false;
+                showGameOver(true);
+            } else if (wrongGuesses >= maxWrong) {
+                gameActive = false;
+                showGameOver(false);
+            }
+        }
+
+        function showGameOver(won) {
+            const modal = document.getElementById('game-over-modal');
+            const title = document.getElementById('result-title');
+            const message = document.getElementById('result-message');
+            const stats = document.getElementById('result-stats');
+
+            if (won) {
+                title.textContent = 'GANASTE!';
+                title.style.color = '#27ae60';
+                message.textContent = `Has acertado la palabra: ${currentWord}`;
+                playSound('win');
+            } else {
+                title.textContent = 'GAME OVER';
+                title.style.color = '#e74c3c';
+                message.textContent = `La palabra era: ${currentWord}`;
+                playSound('lose');
+            }
+
+            stats.textContent = `Aciertos: ${correctGuesses} | Errores: ${wrongGuesses}`;
+            
+            displayLeaderboard();
+            modal.style.display = 'flex';
+        }
+
+        function saveScore() {
+            const playerName = document.getElementById('player-name').value.trim();
+            if (!playerName) {
+                alert('Por favor ingresa tu nombre');
+                return;
+            }
+
+            const scores = JSON.parse(localStorage.getItem('ahorcado-scores') || '[]');
+            scores.push({
+                name: playerName,
+                correct: correctGuesses,
+                wrong: wrongGuesses,
+                date: new Date().toLocaleDateString()
+            });
+
+            scores.sort((a, b) => {
+                if (b.correct !== a.correct) return b.correct - a.correct;
+                return a.wrong - b.wrong;
+            });
+
+            localStorage.setItem('ahorcado-scores', JSON.stringify(scores.slice(0, 10)));
+            displayLeaderboard();
+            document.getElementById('player-name').value = '';
+        }
+
+        function displayLeaderboard() {
+            const scores = JSON.parse(localStorage.getItem('ahorcado-scores') || '[]');
+            const list = document.getElementById('leaderboard-list');
+            
+            if (scores.length === 0) {
+                list.innerHTML = '<p style="text-align: center; color: #7f8c8d;">No hay puntuaciones guardadas</p>';
+                return;
+            }
+
+            list.innerHTML = scores.map((score, index) => `
+                <div class="leaderboard-entry">
+                    <span>${index + 1}. ${score.name}</span>
+                    <span>✓${score.correct} ✗${score.wrong}</span>
+                </div>
+            `).join('');
+        }
+
+        function playAgain() {
+            document.getElementById('game-over-modal').style.display = 'none';
+            resetGame();
+        }
+
+        // Soporte para teclado físico
+        document.addEventListener('keydown', (e) => {
+            if (!gameActive) return;
+            
+            let letter = e.key.toUpperCase().normalize('NFC');
+            
+            // Verificar si es una letra válida (A-Z o Ñ)
+            if ((letter.length === 1 && ((letter >= 'A' && letter <= 'Z') || letter === 'Ñ'))) {
+                guessLetter(letter);
+            }
+        });
+    </script>
+</body>
+</html>

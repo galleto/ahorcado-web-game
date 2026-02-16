@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ahorcado</title>
+    <title>Ahorcado - Juego en Español</title>
     <style>
         * {
             margin: 0;
@@ -779,6 +779,7 @@
             <p>• Las letras correctas se mostrarán en verde.</p>
             <p>• Las letras incorrectas se mostrarán en rojo y agregarán una parte al ahorcado.</p>
             <p>• ¡Intenta adivinar la palabra antes de que se complete el dibujo!</p>
+            <p><strong>Nota:</strong> Las palabras no llevan tildes para facilitar el juego, pero sí incluyen la Ñ.</p>
             <button class="btn" onclick="startGame()">EMPEZAR A JUGAR</button>
             <button class="btn btn-secondary" onclick="showSplash()">VOLVER</button>
         </div>
@@ -830,31 +831,32 @@
     </div>
 
     <script>
-        const normalizarPalabra = (palabra) => {
-            return palabra.normalize('NFC').toUpperCase().trim();
-        };
-
-        const normalizarLetra = (letra) => {
-            return letra.normalize('NFC').toUpperCase().trim();
-        };
+        // Función para remover acentos pero mantener la Ñ
+        function removeAccents(str) {
+            return str
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '') // Remueve diacríticos (acentos)
+                .normalize('NFC')
+                .toUpperCase();
+        }
 
         const palabras = [
-            {word: "ADIÓS", hint: "Lo que dices cuando te vas"},
+            {word: "ADIOS", hint: "Lo que dices cuando te vas"},
             {word: "AGUA", hint: "Líquido transparente que bebes"},
             {word: "AHORA", hint: "En este momento"},
             {word: "AMAR", hint: "Sentir cariño profundo"},
             {word: "AMIGO", hint: "Persona con la que te llevas bien"},
             {word: "APRENDER", hint: "Adquirir conocimientos"},
-            {word: "ÁRBOL", hint: "Planta grande con tronco"},
-            {word: "AUTOBÚS", hint: "Vehículo de transporte público"},
+            {word: "ARBOL", hint: "Planta grande con tronco"},
+            {word: "AUTOBUS", hint: "Vehículo de transporte público"},
             {word: "AYER", hint: "El día antes de hoy"},
-            {word: "BOLÍGRAFO", hint: "Instrumento para escribir con tinta"},
+            {word: "BOLIGRAFO", hint: "Instrumento para escribir con tinta"},
             {word: "BONITO", hint: "Algo agradable a la vista"},
             {word: "BUENO", hint: "Lo contrario de malo"},
             {word: "CABEZA", hint: "Parte superior del cuerpo"},
             {word: "CALLE", hint: "Vía pública en la ciudad"},
             {word: "CAMA", hint: "Mueble donde duermes"},
-            {word: "CANCIÓN", hint: "Pieza musical con letra"},
+            {word: "CANCION", hint: "Pieza musical con letra"},
             {word: "CASA", hint: "Lugar donde vives"},
             {word: "CIUDAD", hint: "Área urbana grande"},
             {word: "COCHE", hint: "Vehículo de cuatro ruedas"},
@@ -868,10 +870,10 @@
             {word: "DAR", hint: "Entregar algo a alguien"},
             {word: "DECIR", hint: "Expresar con palabras"},
             {word: "DEPORTE", hint: "Actividad física y competitiva"},
-            {word: "DÍA", hint: "Período de 24 horas"},
-            {word: "DIFÍCIL", hint: "Lo contrario de fácil"},
+            {word: "DIA", hint: "Período de 24 horas"},
+            {word: "DIFICIL", hint: "Lo contrario de fácil"},
             {word: "DINERO", hint: "Monedas y billetes"},
-            {word: "FÁCIL", hint: "Que no requiere esfuerzo"},
+            {word: "FACIL", hint: "Que no requiere esfuerzo"},
             {word: "FAMILIA", hint: "Grupo de personas emparentadas"},
             {word: "FEO", hint: "Lo contrario de bonito"},
             {word: "FIESTA", hint: "Celebración con gente"},
@@ -882,7 +884,7 @@
             {word: "GRANDE", hint: "De mucho tamaño"},
             {word: "GUSTAR", hint: "Agradar o complacer"},
             {word: "HABER", hint: "Verbo auxiliar"},
-            {word: "HABITACIÓN", hint: "Cuarto de una casa"},
+            {word: "HABITACION", hint: "Cuarto de una casa"},
             {word: "HABLAR", hint: "Comunicarse con palabras"},
             {word: "HACER", hint: "Realizar o ejecutar algo"},
             {word: "HERMANA", hint: "Hija de tus mismos padres"},
@@ -896,7 +898,7 @@
             {word: "INTELIGENTE", hint: "Persona muy lista"},
             {word: "IR", hint: "Moverse de un lugar a otro"},
             {word: "JUGAR", hint: "Divertirse con juegos"},
-            {word: "LÁPIZ", hint: "Instrumento para escribir de grafito"},
+            {word: "LAPIZ", hint: "Instrumento para escribir de grafito"},
             {word: "LEER", hint: "Interpretar textos escritos"},
             {word: "LIBRO", hint: "Conjunto de hojas con texto"},
             {word: "LLORAR", hint: "Derramar lágrimas"},
@@ -905,12 +907,12 @@
             {word: "MAÑANA", hint: "El día después de hoy"},
             {word: "MAR", hint: "Gran masa de agua salada"},
             {word: "MUJER", hint: "Persona adulta femenina"},
-            {word: "MÚSICA", hint: "Arte de combinar sonidos"},
+            {word: "MUSICA", hint: "Arte de combinar sonidos"},
             {word: "NIÑO", hint: "Persona de corta edad"},
             {word: "NOCHE", hint: "Período de oscuridad"},
             {word: "NOMBRE", hint: "Palabra que identifica a una persona"},
             {word: "NUEVO", hint: "Recién hecho o comprado"},
-            {word: "NÚMERO", hint: "Símbolo matemático"},
+            {word: "NUMERO", hint: "Símbolo matemático"},
             {word: "NUNCA", hint: "En ningún momento"},
             {word: "PADRE", hint: "Hombre que tiene hijos"},
             {word: "PAGAR", hint: "Dar dinero por algo"},
@@ -922,20 +924,20 @@
             {word: "PONER", hint: "Colocar algo en un lugar"},
             {word: "PREGUNTAR", hint: "Hacer una pregunta"},
             {word: "PUERTA", hint: "Entrada a una habitación"},
-            {word: "RÁPIDO", hint: "Que se mueve velozmente"},
+            {word: "RAPIDO", hint: "Que se mueve velozmente"},
             {word: "RELOJ", hint: "Aparato que marca la hora"},
             {word: "RESPONDER", hint: "Contestar a una pregunta"},
             {word: "ROPA", hint: "Prendas que vistes"},
             {word: "SENTAR", hint: "Poner el cuerpo sobre algo"},
             {word: "SENTIR", hint: "Experimentar emociones"},
             {word: "SER", hint: "Verbo de existencia"},
-            {word: "SÍ", hint: "Afirmación o aprobación"},
+            {word: "SI", hint: "Afirmación o aprobación"},
             {word: "SILLA", hint: "Mueble para sentarse"},
             {word: "SITIO", hint: "Lugar o espacio"},
             {word: "SONRISA", hint: "Gesto de alegría en la cara"},
             {word: "TARDE", hint: "Período entre mediodía y noche"},
-            {word: "TELÉFONO", hint: "Aparato para llamar"},
-            {word: "TELEVISIÓN", hint: "Aparato para ver programas"},
+            {word: "TELEFONO", hint: "Aparato para llamar"},
+            {word: "TELEVISION", hint: "Aparato para ver programas"},
             {word: "TIENDA", hint: "Local donde se vende"},
             {word: "TRABAJAR", hint: "Realizar una actividad laboral"},
             {word: "VENIR", hint: "Moverse hacia aquí"},
@@ -948,7 +950,7 @@
             {word: "ESPAÑOL", hint: "Idioma que hablas ahora"},
             {word: "ENSEÑAR", hint: "Transmitir conocimientos"},
             {word: "COMPAÑERO", hint: "Persona que acompaña"}
-        ].map(p => ({word: normalizarPalabra(p.word), hint: p.hint}));
+        ];
 
         let currentWord = '';
         let currentHint = '';
@@ -1060,8 +1062,6 @@
         }
 
         function resetGame() {
-            playedWords = playedWords.map(w => normalizarPalabra(w));
-            
             let availableWords = palabras.filter(w => !playedWords.includes(w.word));
             
             if (availableWords.length === 0) {
@@ -1109,12 +1109,11 @@
                 rowDiv.className = 'keyboard-row';
                 
                 for (let letter of row) {
-                    const normalizedLetter = normalizarLetra(letter);
                     const key = document.createElement('button');
                     key.className = 'key';
-                    key.textContent = normalizedLetter;
-                    key.onclick = () => guessLetter(normalizedLetter);
-                    key.id = 'key-' + normalizedLetter;
+                    key.textContent = letter;
+                    key.onclick = () => guessLetter(letter);
+                    key.id = 'key-' + letter;
                     rowDiv.appendChild(key);
                 }
                 
@@ -1129,6 +1128,7 @@
             for (let letter of currentWord) {
                 const box = document.createElement('div');
                 box.className = 'letter-box';
+                // Mostramos la letra si ha sido adivinada
                 if (guessedLetters.has(letter)) {
                     box.textContent = letter;
                 }
@@ -1139,23 +1139,15 @@
         function guessLetter(letter) {
             if (!gameActive || guessedLetters.has(letter)) return;
 
-            const normalizedLetter = normalizarLetra(letter);
-            guessedLetters.add(normalizedLetter);
+            guessedLetters.add(letter);
             
-            const key = document.getElementById('key-' + normalizedLetter);
+            const key = document.getElementById('key-' + letter);
             if (key) {
                 key.classList.add('disabled');
             }
 
-            let letterFound = false;
-            for (let wordLetter of currentWord) {
-                if (normalizarLetra(wordLetter) === normalizedLetter) {
-                    letterFound = true;
-                    break;
-                }
-            }
-
-            if (letterFound) {
+            // Verificar si la letra está en la palabra
+            if (currentWord.includes(letter)) {
                 if (key) key.classList.add('correct');
                 correctGuesses++;
                 document.getElementById('correct-count').textContent = correctGuesses;
@@ -1261,7 +1253,8 @@
         }
 
         function checkGameStatus() {
-            const uniqueLetters = new Set(currentWord.split('').map(l => normalizarLetra(l)));
+            // Verificar si todas las letras únicas de la palabra han sido adivinadas
+            const uniqueLetters = new Set(currentWord.split(''));
             const wordComplete = Array.from(uniqueLetters).every(letter => guessedLetters.has(letter));
 
             if (wordComplete) {
@@ -1344,12 +1337,17 @@
             resetGame();
         }
 
+        // Soporte para teclado físico - Acepta A-Z y Ñ (sin acentos)
         document.addEventListener('keydown', (e) => {
             if (!gameActive) return;
             
-            const letter = normalizarLetra(e.key);
+            let letter = e.key.toUpperCase();
             
-            if (letter.length === 1 && /^[A-ZÑÁÉÍÓÚ]$/.test(letter)) {
+            // Remover acentos de la tecla presionada
+            letter = removeAccents(letter);
+            
+            // Verificar si es una letra válida (A-Z o Ñ)
+            if (letter.length === 1 && /^[A-ZÑ]$/.test(letter)) {
                 guessLetter(letter);
             }
         });

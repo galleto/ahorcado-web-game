@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ahorcado - Juego en Español</title>
+    <title>Ahorcado - Juego en Español Optimizado</title>
     <style>
         * {
             margin: 0;
@@ -14,19 +14,8 @@
         body {
             font-family: 'Courier New', monospace;
             background: 
-                repeating-linear-gradient(
-                    transparent,
-                    transparent 24px,
-                    #d4d4d4 24px,
-                    #d4d4d4 25px
-                ),
-                repeating-linear-gradient(
-                    90deg,
-                    transparent,
-                    transparent 24px,
-                    #d4d4d4 24px,
-                    #d4d4d4 25px
-                ),
+                repeating-linear-gradient(transparent, transparent 24px, #d4d4d4 24px, #d4d4d4 25px),
+                repeating-linear-gradient(90deg, transparent, transparent 24px, #d4d4d4 24px, #d4d4d4 25px),
                 #fff;
             background-size: 25px 25px;
             min-height: 100vh;
@@ -37,7 +26,6 @@
             overflow-x: hidden;
         }
 
-        /* Contenedor principal */
         .notebook-bg {
             background: transparent;
             padding: 20px;
@@ -47,7 +35,6 @@
             overflow-y: auto;
         }
 
-        /* Responsive para móviles */
         @media (max-width: 768px) {
             .notebook-bg {
                 padding: 15px;
@@ -55,7 +42,6 @@
             }
         }
 
-        /* Splash Screen */
         #splash-screen {
             text-align: center;
             position: relative;
@@ -73,11 +59,51 @@
             border-radius: 10px;
         }
 
+        .repo-link {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            border: 2px solid #3498db;
+        }
+
+        .repo-link a {
+            color: #3498db;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: color 0.3s;
+        }
+
+        .repo-link a:hover {
+            color: #2980b9;
+        }
+
+        .repo-link svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
         @media (max-width: 768px) {
             #splash-screen h1 {
                 font-size: 2.5em;
                 margin: 20px 0;
                 padding: 15px;
+            }
+            .repo-link {
+                padding: 12px;
+                margin: 15px 0;
+            }
+            .repo-link a {
+                font-size: 1em;
+            }
+            .repo-link svg {
+                width: 20px;
+                height: 20px;
             }
         }
 
@@ -87,9 +113,17 @@
                 margin: 15px 0;
                 padding: 10px;
             }
+            .repo-link {
+                padding: 10px;
+                margin: 10px 0;
+            }
+            .repo-link a {
+                font-size: 0.9em;
+                flex-direction: column;
+                gap: 5px;
+            }
         }
 
-        /* Carrusel de palabras */
         .word-carousel {
             height: 50px;
             overflow: hidden;
@@ -130,16 +164,13 @@
             .word-carousel {
                 height: 40px;
             }
-            
             .carousel-word {
                 font-size: 1.2em;
                 height: 40px;
             }
-            
             .word-carousel-top {
                 margin-bottom: 15px;
             }
-            
             .word-carousel-bottom {
                 margin-top: 15px;
             }
@@ -149,7 +180,6 @@
             .word-carousel {
                 height: 35px;
             }
-            
             .carousel-word {
                 font-size: 1em;
                 height: 35px;
@@ -224,7 +254,6 @@
             background: #7f8c8d;
         }
 
-        /* Instrucciones */
         #instructions {
             display: none;
         }
@@ -247,7 +276,6 @@
                 font-size: 1.6em;
                 margin-bottom: 15px;
             }
-            
             #instructions p {
                 font-size: 0.95em;
                 line-height: 1.6;
@@ -260,7 +288,6 @@
                 font-size: 1.4em;
                 margin-bottom: 12px;
             }
-            
             #instructions p {
                 font-size: 0.9em;
                 line-height: 1.5;
@@ -268,7 +295,6 @@
             }
         }
 
-        /* Juego */
         #game-screen {
             display: none;
         }
@@ -301,12 +327,10 @@
             .game-header h2 {
                 font-size: 1.5em;
             }
-            
             .stats {
                 gap: 15px;
                 font-size: 0.95em;
             }
-            
             .stat {
                 font-size: 1em;
             }
@@ -316,11 +340,9 @@
             .game-header h2 {
                 font-size: 1.3em;
             }
-            
             .stats {
                 gap: 10px;
             }
-            
             .stat {
                 font-size: 0.9em;
             }
@@ -336,7 +358,6 @@
             font-weight: bold;
         }
 
-        /* Canvas de la horca */
         #hangman-canvas {
             display: block;
             margin: 0 auto 20px;
@@ -363,7 +384,6 @@
             }
         }
 
-        /* Palabra */
         .word-display {
             display: flex;
             justify-content: center;
@@ -389,7 +409,6 @@
                 gap: 8px;
                 margin: 20px 0;
             }
-            
             .letter-box {
                 width: 35px;
                 height: 45px;
@@ -402,7 +421,6 @@
                 gap: 6px;
                 margin: 15px 0;
             }
-            
             .letter-box {
                 width: 28px;
                 height: 38px;
@@ -411,7 +429,6 @@
             }
         }
 
-        /* Letras usadas */
         .used-letters {
             text-align: center;
             margin: 20px 0;
@@ -424,7 +441,6 @@
             font-size: 1.1em;
         }
 
-        /* Pista */
         .hint-section {
             text-align: center;
             margin: 20px 0;
@@ -448,17 +464,14 @@
                 font-size: 0.9em;
                 margin: 15px 0;
             }
-            
             .used-letters span {
                 font-size: 1em;
                 margin: 0 3px;
             }
-            
             .hint-section {
                 padding: 12px;
                 margin: 15px 0;
             }
-            
             .hint-section span {
                 font-size: 1em;
             }
@@ -469,24 +482,20 @@
                 font-size: 0.85em;
                 margin: 10px 0;
             }
-            
             .used-letters span {
                 font-size: 0.95em;
                 margin: 0 2px;
             }
-            
             .hint-section {
                 padding: 10px;
                 margin: 10px 0;
                 font-size: 0.9em;
             }
-            
             .hint-section span {
                 font-size: 0.95em;
             }
         }
 
-        /* Teclado */
         .keyboard {
             display: flex;
             flex-direction: column;
@@ -535,19 +544,15 @@
                 margin-top: 20px;
                 max-width: 100%;
             }
-
             .keyboard-row {
                 gap: 5px;
             }
-
             .keyboard-row:nth-child(2) {
                 margin-left: 15px;
             }
-
             .keyboard-row:nth-child(3) {
                 margin-left: 30px;
             }
-            
             .key {
                 padding: 12px 10px;
                 font-size: 1.1em;
@@ -561,19 +566,15 @@
                 gap: 4px;
                 margin-top: 15px;
             }
-
             .keyboard-row {
                 gap: 3px;
             }
-
             .keyboard-row:nth-child(2) {
                 margin-left: 10px;
             }
-
             .keyboard-row:nth-child(3) {
                 margin-left: 20px;
             }
-            
             .key {
                 padding: 10px 6px;
                 font-size: 0.95em;
@@ -587,15 +588,12 @@
             .keyboard-row {
                 gap: 2px;
             }
-
             .keyboard-row:nth-child(2) {
                 margin-left: 8px;
             }
-
             .keyboard-row:nth-child(3) {
                 margin-left: 15px;
             }
-
             .key {
                 padding: 8px 4px;
                 font-size: 0.85em;
@@ -626,7 +624,6 @@
             opacity: 0.6;
         }
 
-        /* Modal de fin de juego */
         .modal {
             display: none;
             position: fixed;
@@ -680,12 +677,10 @@
                 padding: 30px 20px;
                 max-width: 95%;
             }
-            
             .modal-content h2 {
                 font-size: 1.8em;
                 margin-bottom: 15px;
             }
-            
             .modal-content p {
                 font-size: 1em;
                 margin: 12px 0;
@@ -696,21 +691,17 @@
             .modal {
                 padding: 10px;
             }
-            
             .modal-content {
                 padding: 25px 15px;
             }
-            
             .modal-content h2 {
                 font-size: 1.5em;
                 margin-bottom: 12px;
             }
-            
             .modal-content p {
                 font-size: 0.95em;
                 margin: 10px 0;
             }
-            
             .modal-content input {
                 padding: 8px;
                 font-size: 0.95em;
@@ -742,7 +733,6 @@
             .leaderboard h3 {
                 font-size: 1.1em;
             }
-            
             .leaderboard-entry {
                 padding: 6px;
                 font-size: 0.85em;
@@ -756,29 +746,32 @@
 </head>
 <body>
     <div class="notebook-bg">
-        <!-- Splash Screen -->
         <div id="splash-screen">
             <div class="word-carousel word-carousel-top">
-                <div class="word-carousel-inner" id="word-carousel-top">
-                    <!-- Las palabras se generan dinámicamente -->
-                </div>
+                <div class="word-carousel-inner" id="word-carousel-top"></div>
             </div>
             
             <h1>AHORCADO</h1>
+
+            <div class="repo-link">
+                <a href="https://github.com/galleto/ahorcado-web-game" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+                    </svg>
+                    Ver código en GitHub: galleto/ahorcado-web-game
+                </a>
+            </div>
             
             <div class="word-carousel word-carousel-bottom">
-                <div class="word-carousel-inner reverse" id="word-carousel-bottom">
-                    <!-- Las palabras se generan dinámicamente -->
-                </div>
+                <div class="word-carousel-inner reverse" id="word-carousel-bottom"></div>
             </div>
             
             <button class="btn" onclick="showInstructions()">CÓMO SE JUEGA</button>
             <button class="btn" onclick="startGame()">JUGAR</button>
         </div>
 
-        <!-- Instrucciones -->
         <div id="instructions">
-            <h2>COMO SE JUEGA</h2>
+            <h2>CÓMO SE JUEGA</h2>
             <p><strong>Objetivo:</strong> Adivina la palabra oculta antes de completar el dibujo del ahorcado.</p>
             <p><strong>Reglas:</strong></p>
             <p>• Tienes 6 oportunidades para equivocarte.</p>
@@ -790,7 +783,6 @@
             <button class="btn btn-secondary" onclick="showSplash()">VOLVER</button>
         </div>
 
-        <!-- Pantalla del juego -->
         <div id="game-screen">
             <div class="game-header">
                 <h2>AHORCADO</h2>
@@ -805,9 +797,9 @@
 
             <div class="word-display" id="word-display"></div>
 
-            <div class="hint-section" style="text-align: center; margin: 20px 0; padding: 15px; background: #fff3cd; border: 2px dashed #ffc107; border-radius: 10px;">
-                <strong style="color: #856404;">Pista:</strong> 
-                <span id="hint-text" style="color: #856404; font-size: 1.1em;"></span>
+            <div class="hint-section">
+                <strong>Pista:</strong> 
+                <span id="hint-text"></span>
             </div>
 
             <div class="used-letters">
@@ -822,7 +814,6 @@
         </div>
     </div>
 
-    <!-- Modal de fin de juego -->
     <div class="modal" id="game-over-modal">
         <div class="modal-content">
             <h2 id="result-title"></h2>
@@ -839,132 +830,146 @@
     </div>
 
     <script>
+        const normalizarPalabra = (palabra) => {
+            return palabra.normalize('NFC').toUpperCase().trim();
+        };
+
+        const normalizarLetra = (letra) => {
+            return letra.normalize('NFC').toUpperCase().trim();
+        };
+
         const palabras = [
-            {word: "Adios", hint: "Lo que dices cuando te vas"},
-            {word: "Agua", hint: "Líquido transparente que bebes"},
-            {word: "Ahora", hint: "En este momento"},
-            {word: "Amar", hint: "Sentir cariño profundo"},
-            {word: "Amigo", hint: "Persona con la que te llevas bien"},
-            {word: "Aprender", hint: "Adquirir conocimientos"},
-            {word: "Arbol", hint: "Planta grande con tronco"},
-            {word: "Autobus", hint: "Vehículo de transporte público"},
-            {word: "Ayer", hint: "El día antes de hoy"},
-            {word: "Boligrafo", hint: "Instrumento para escribir con tinta"},
-            {word: "Bonito", hint: "Algo agradable a la vista"},
-            {word: "Bueno", hint: "Lo contrario de malo"},
-            {word: "Cabeza", hint: "Parte superior del cuerpo"},
-            {word: "Calle", hint: "Vía pública en la ciudad"},
-            {word: "Cama", hint: "Mueble donde duermes"},
-            {word: "Cancion", hint: "Pieza musical con letra"},
-            {word: "Casa", hint: "Lugar donde vives"},
-            {word: "Ciudad", hint: "Área urbana grande"},
-            {word: "Coche", hint: "Vehículo de cuatro ruedas"},
-            {word: "Colegio", hint: "Lugar donde estudian niños"},
-            {word: "Comida", hint: "Lo que comes para alimentarte"},
-            {word: "Contento", hint: "Sentirse feliz"},
-            {word: "Correr", hint: "Moverse rápido con las piernas"},
-            {word: "Cosa", hint: "Objeto o asunto indefinido"},
-            {word: "Chica", hint: "Mujer joven"},
-            {word: "Chico", hint: "Hombre joven"},
-            {word: "Dar", hint: "Entregar algo a alguien"},
-            {word: "Decir", hint: "Expresar con palabras"},
-            {word: "Deporte", hint: "Actividad física y competitiva"},
-            {word: "Dia", hint: "Período de 24 horas"},
-            {word: "Dificil", hint: "Lo contrario de fácil"},
-            {word: "Dinero", hint: "Monedas y billetes"},
-            {word: "Facil", hint: "Que no requiere esfuerzo"},
-            {word: "Familia", hint: "Grupo de personas emparentadas"},
-            {word: "Feo", hint: "Lo contrario de bonito"},
-            {word: "Fiesta", hint: "Celebración con gente"},
-            {word: "Flor", hint: "Parte colorida de las plantas"},
-            {word: "Fuerte", hint: "Que tiene mucha fuerza"},
-            {word: "Galleta", hint: "Dulce crujiente para comer"},
-            {word: "Gente", hint: "Conjunto de personas"},
-            {word: "Grande", hint: "De mucho tamaño"},
-            {word: "Gustar", hint: "Agradar o complacer"},
-            {word: "Haber", hint: "Verbo auxiliar"},
-            {word: "Habitacion", hint: "Cuarto de una casa"},
-            {word: "Hablar", hint: "Comunicarse con palabras"},
-            {word: "Hacer", hint: "Realizar o ejecutar algo"},
-            {word: "Hermana", hint: "Hija de tus mismos padres"},
-            {word: "Hermano", hint: "Hijo de tus mismos padres"},
-            {word: "Hija", hint: "Descendiente femenina"},
-            {word: "Hijo", hint: "Descendiente masculino"},
-            {word: "Hogar", hint: "Casa donde vive la familia"},
-            {word: "Hola", hint: "Saludo informal"},
-            {word: "Hombre", hint: "Persona adulta masculina"},
-            {word: "Hoy", hint: "El día presente"},
-            {word: "Inteligente", hint: "Persona muy lista"},
-            {word: "Ir", hint: "Moverse de un lugar a otro"},
-            {word: "Jugar", hint: "Divertirse con juegos"},
-            {word: "Lapiz", hint: "Instrumento para escribir de grafito"},
-            {word: "Leer", hint: "Interpretar textos escritos"},
-            {word: "Libro", hint: "Conjunto de hojas con texto"},
-            {word: "Llorar", hint: "Derramar lágrimas"},
-            {word: "Madre", hint: "Mujer que tiene hijos"},
-            {word: "Malo", hint: "Lo contrario de bueno"},
-            {word: "Mañana", hint: "El día después de hoy"},
-            {word: "Mar", hint: "Gran masa de agua salada"},
-            {word: "Mujer", hint: "Persona adulta femenina"},
-            {word: "Musica", hint: "Arte de combinar sonidos"},
-            {word: "Nino", hint: "Persona de corta edad"},
-            {word: "Noche", hint: "Período de oscuridad"},
-            {word: "Nombre", hint: "Palabra que identifica a una persona"},
-            {word: "Nuevo", hint: "Recién hecho o comprado"},
-            {word: "Numero", hint: "Símbolo matemático"},
-            {word: "Nunca", hint: "En ningún momento"},
-            {word: "Padre", hint: "Hombre que tiene hijos"},
-            {word: "Pagar", hint: "Dar dinero por algo"},
-            {word: "Papelera", hint: "Recipiente para basura"},
-            {word: "Parar", hint: "Detenerse o cesar"},
-            {word: "Pensar", hint: "Reflexionar con la mente"},
-            {word: "Pequeno", hint: "De poco tamaño"},
-            {word: "Pero", hint: "Conjunción adversativa"},
-            {word: "Poner", hint: "Colocar algo en un lugar"},
-            {word: "Preguntar", hint: "Hacer una pregunta"},
-            {word: "Puerta", hint: "Entrada a una habitación"},
-            {word: "Rapido", hint: "Que se mueve velozmente"},
-            {word: "Reloj", hint: "Aparato que marca la hora"},
-            {word: "Responder", hint: "Contestar a una pregunta"},
-            {word: "Ropa", hint: "Prendas que vistes"},
-            {word: "Sentar", hint: "Poner el cuerpo sobre algo"},
-            {word: "Sentir", hint: "Experimentar emociones"},
-            {word: "Ser", hint: "Verbo de existencia"},
-            {word: "Si", hint: "Afirmación o aprobación"},
-            {word: "Silla", hint: "Mueble para sentarse"},
-            {word: "Sitio", hint: "Lugar o espacio"},
-            {word: "Sonrisa", hint: "Gesto de alegría en la cara"},
-            {word: "Tarde", hint: "Período entre mediodía y noche"},
-            {word: "Telefono", hint: "Aparato para llamar"},
-            {word: "Television", hint: "Aparato para ver programas"},
-            {word: "Tienda", hint: "Local donde se vende"},
-            {word: "Trabajar", hint: "Realizar una actividad laboral"},
-            {word: "Venir", hint: "Moverse hacia aquí"},
-            {word: "Zapato", hint: "Calzado que protege el pie"},
-            {word: "Año", hint: "Período de 12 meses"},
-            {word: "Baño", hint: "Habitación con ducha o bañera"},
-            {word: "Niña", hint: "Persona joven de sexo femenino"},
-            {word: "Montaña", hint: "Elevación natural del terreno"},
-            {word: "Sueño", hint: "Estado de reposo o deseo"},
-            {word: "Pequeño", hint: "De tamaño reducido"},
-            {word: "Español", hint: "Idioma que hablas ahora"},
-            {word: "Enseñar", hint: "Transmitir conocimientos"},
-            {word: "Compañero", hint: "Persona que acompaña"}
-        ];
+            {word: "ADIÓS", hint: "Lo que dices cuando te vas"},
+            {word: "AGUA", hint: "Líquido transparente que bebes"},
+            {word: "AHORA", hint: "En este momento"},
+            {word: "AMAR", hint: "Sentir cariño profundo"},
+            {word: "AMIGO", hint: "Persona con la que te llevas bien"},
+            {word: "APRENDER", hint: "Adquirir conocimientos"},
+            {word: "ÁRBOL", hint: "Planta grande con tronco"},
+            {word: "AUTOBÚS", hint: "Vehículo de transporte público"},
+            {word: "AYER", hint: "El día antes de hoy"},
+            {word: "BOLÍGRAFO", hint: "Instrumento para escribir con tinta"},
+            {word: "BONITO", hint: "Algo agradable a la vista"},
+            {word: "BUENO", hint: "Lo contrario de malo"},
+            {word: "CABEZA", hint: "Parte superior del cuerpo"},
+            {word: "CALLE", hint: "Vía pública en la ciudad"},
+            {word: "CAMA", hint: "Mueble donde duermes"},
+            {word: "CANCIÓN", hint: "Pieza musical con letra"},
+            {word: "CASA", hint: "Lugar donde vives"},
+            {word: "CIUDAD", hint: "Área urbana grande"},
+            {word: "COCHE", hint: "Vehículo de cuatro ruedas"},
+            {word: "COLEGIO", hint: "Lugar donde estudian niños"},
+            {word: "COMIDA", hint: "Lo que comes para alimentarte"},
+            {word: "CONTENTO", hint: "Sentirse feliz"},
+            {word: "CORRER", hint: "Moverse rápido con las piernas"},
+            {word: "COSA", hint: "Objeto o asunto indefinido"},
+            {word: "CHICA", hint: "Mujer joven"},
+            {word: "CHICO", hint: "Hombre joven"},
+            {word: "DAR", hint: "Entregar algo a alguien"},
+            {word: "DECIR", hint: "Expresar con palabras"},
+            {word: "DEPORTE", hint: "Actividad física y competitiva"},
+            {word: "DÍA", hint: "Período de 24 horas"},
+            {word: "DIFÍCIL", hint: "Lo contrario de fácil"},
+            {word: "DINERO", hint: "Monedas y billetes"},
+            {word: "FÁCIL", hint: "Que no requiere esfuerzo"},
+            {word: "FAMILIA", hint: "Grupo de personas emparentadas"},
+            {word: "FEO", hint: "Lo contrario de bonito"},
+            {word: "FIESTA", hint: "Celebración con gente"},
+            {word: "FLOR", hint: "Parte colorida de las plantas"},
+            {word: "FUERTE", hint: "Que tiene mucha fuerza"},
+            {word: "GALLETA", hint: "Dulce crujiente para comer"},
+            {word: "GENTE", hint: "Conjunto de personas"},
+            {word: "GRANDE", hint: "De mucho tamaño"},
+            {word: "GUSTAR", hint: "Agradar o complacer"},
+            {word: "HABER", hint: "Verbo auxiliar"},
+            {word: "HABITACIÓN", hint: "Cuarto de una casa"},
+            {word: "HABLAR", hint: "Comunicarse con palabras"},
+            {word: "HACER", hint: "Realizar o ejecutar algo"},
+            {word: "HERMANA", hint: "Hija de tus mismos padres"},
+            {word: "HERMANO", hint: "Hijo de tus mismos padres"},
+            {word: "HIJA", hint: "Descendiente femenina"},
+            {word: "HIJO", hint: "Descendiente masculino"},
+            {word: "HOGAR", hint: "Casa donde vive la familia"},
+            {word: "HOLA", hint: "Saludo informal"},
+            {word: "HOMBRE", hint: "Persona adulta masculina"},
+            {word: "HOY", hint: "El día presente"},
+            {word: "INTELIGENTE", hint: "Persona muy lista"},
+            {word: "IR", hint: "Moverse de un lugar a otro"},
+            {word: "JUGAR", hint: "Divertirse con juegos"},
+            {word: "LÁPIZ", hint: "Instrumento para escribir de grafito"},
+            {word: "LEER", hint: "Interpretar textos escritos"},
+            {word: "LIBRO", hint: "Conjunto de hojas con texto"},
+            {word: "LLORAR", hint: "Derramar lágrimas"},
+            {word: "MADRE", hint: "Mujer que tiene hijos"},
+            {word: "MALO", hint: "Lo contrario de bueno"},
+            {word: "MAÑANA", hint: "El día después de hoy"},
+            {word: "MAR", hint: "Gran masa de agua salada"},
+            {word: "MUJER", hint: "Persona adulta femenina"},
+            {word: "MÚSICA", hint: "Arte de combinar sonidos"},
+            {word: "NIÑO", hint: "Persona de corta edad"},
+            {word: "NOCHE", hint: "Período de oscuridad"},
+            {word: "NOMBRE", hint: "Palabra que identifica a una persona"},
+            {word: "NUEVO", hint: "Recién hecho o comprado"},
+            {word: "NÚMERO", hint: "Símbolo matemático"},
+            {word: "NUNCA", hint: "En ningún momento"},
+            {word: "PADRE", hint: "Hombre que tiene hijos"},
+            {word: "PAGAR", hint: "Dar dinero por algo"},
+            {word: "PAPELERA", hint: "Recipiente para basura"},
+            {word: "PARAR", hint: "Detenerse o cesar"},
+            {word: "PENSAR", hint: "Reflexionar con la mente"},
+            {word: "PEQUEÑO", hint: "De poco tamaño"},
+            {word: "PERO", hint: "Conjunción adversativa"},
+            {word: "PONER", hint: "Colocar algo en un lugar"},
+            {word: "PREGUNTAR", hint: "Hacer una pregunta"},
+            {word: "PUERTA", hint: "Entrada a una habitación"},
+            {word: "RÁPIDO", hint: "Que se mueve velozmente"},
+            {word: "RELOJ", hint: "Aparato que marca la hora"},
+            {word: "RESPONDER", hint: "Contestar a una pregunta"},
+            {word: "ROPA", hint: "Prendas que vistes"},
+            {word: "SENTAR", hint: "Poner el cuerpo sobre algo"},
+            {word: "SENTIR", hint: "Experimentar emociones"},
+            {word: "SER", hint: "Verbo de existencia"},
+            {word: "SÍ", hint: "Afirmación o aprobación"},
+            {word: "SILLA", hint: "Mueble para sentarse"},
+            {word: "SITIO", hint: "Lugar o espacio"},
+            {word: "SONRISA", hint: "Gesto de alegría en la cara"},
+            {word: "TARDE", hint: "Período entre mediodía y noche"},
+            {word: "TELÉFONO", hint: "Aparato para llamar"},
+            {word: "TELEVISIÓN", hint: "Aparato para ver programas"},
+            {word: "TIENDA", hint: "Local donde se vende"},
+            {word: "TRABAJAR", hint: "Realizar una actividad laboral"},
+            {word: "VENIR", hint: "Moverse hacia aquí"},
+            {word: "ZAPATO", hint: "Calzado que protege el pie"},
+            {word: "AÑO", hint: "Período de 12 meses"},
+            {word: "BAÑO", hint: "Habitación con ducha o bañera"},
+            {word: "NIÑA", hint: "Persona joven de sexo femenino"},
+            {word: "MONTAÑA", hint: "Elevación natural del terreno"},
+            {word: "SUEÑO", hint: "Estado de reposo o deseo"},
+            {word: "ESPAÑOL", hint: "Idioma que hablas ahora"},
+            {word: "ENSEÑAR", hint: "Transmitir conocimientos"},
+            {word: "COMPAÑERO", hint: "Persona que acompaña"}
+        ].map(p => ({word: normalizarPalabra(p.word), hint: p.hint}));
 
         let currentWord = '';
         let currentHint = '';
-        let guessedLetters = [];
+        let guessedLetters = new Set();
         let wrongGuesses = 0;
         let correctGuesses = 0;
         let maxWrong = 6;
         let gameActive = false;
         let playedWords = JSON.parse(localStorage.getItem('ahorcado-played-words') || '[]');
 
-        // Sonidos del juego usando Web Audio API
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioContext = null;
+
+        function initAudioContext() {
+            if (!audioContext) {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
 
         function playSound(type) {
+            initAudioContext();
+            
             const oscillator = audioContext.createOscillator();
             const gainNode = audioContext.createGain();
             
@@ -972,19 +977,18 @@
             gainNode.connect(audioContext.destination);
             
             if (type === 'correct') {
-                oscillator.frequency.value = 523.25; // Do
+                oscillator.frequency.value = 523.25;
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.3);
             } else if (type === 'wrong') {
-                oscillator.frequency.value = 196; // Sol grave
+                oscillator.frequency.value = 196;
                 gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
                 gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
                 oscillator.start(audioContext.currentTime);
                 oscillator.stop(audioContext.currentTime + 0.5);
             } else if (type === 'win') {
-                // Melodía de victoria
                 const notes = [523.25, 587.33, 659.25, 783.99];
                 notes.forEach((freq, i) => {
                     const osc = audioContext.createOscillator();
@@ -998,7 +1002,6 @@
                     osc.stop(audioContext.currentTime + i * 0.15 + 0.3);
                 });
             } else if (type === 'lose') {
-                // Melodía de derrota
                 const notes = [392, 349.23, 329.63, 293.66];
                 notes.forEach((freq, i) => {
                     const osc = audioContext.createOscillator();
@@ -1014,19 +1017,13 @@
             }
         }
 
-        const canvas = document.getElementById('hangman-canvas');
-        const ctx = canvas.getContext('2d');
-
-        // Inicializar carrusel de palabras
         function initWordCarousel() {
             const carouselTop = document.getElementById('word-carousel-top');
             const carouselBottom = document.getElementById('word-carousel-bottom');
             
-            // Seleccionar palabras aleatorias para cada carrusel
             const shuffledTop = [...palabras].sort(() => Math.random() - 0.5).slice(0, 20);
             const shuffledBottom = [...palabras].sort(() => Math.random() - 0.5).slice(0, 20);
             
-            // Duplicar para efecto infinito
             const wordsTop = [...shuffledTop, ...shuffledTop];
             const wordsBottom = [...shuffledBottom, ...shuffledBottom];
             
@@ -1039,7 +1036,6 @@
             ).join('');
         }
 
-        // Inicializar el carrusel cuando carga la página
         document.addEventListener('DOMContentLoaded', initWordCarousel);
 
         function showSplash() {
@@ -1055,6 +1051,7 @@
         }
 
         function startGame() {
+            initAudioContext();
             document.getElementById('splash-screen').style.display = 'none';
             document.getElementById('instructions').style.display = 'none';
             document.getElementById('game-screen').style.display = 'block';
@@ -1063,28 +1060,25 @@
         }
 
         function resetGame() {
-            // Filtrar palabras disponibles (que no se han jugado)
+            playedWords = playedWords.map(w => normalizarPalabra(w));
+            
             let availableWords = palabras.filter(w => !playedWords.includes(w.word));
             
-            // Si ya jugamos todas las palabras, resetear la lista
             if (availableWords.length === 0) {
                 playedWords = [];
                 localStorage.setItem('ahorcado-played-words', JSON.stringify([]));
                 availableWords = palabras;
             }
             
-            // Seleccionar palabra aleatoria de las disponibles
             const randomWord = availableWords[Math.floor(Math.random() * availableWords.length)];
             
-            // Normalizar la palabra para asegurar que Ñ se maneje correctamente
-            currentWord = randomWord.word.toUpperCase().normalize('NFC');
+            currentWord = randomWord.word;
             currentHint = randomWord.hint;
             
-            // Agregar a la lista de palabras jugadas
-            playedWords.push(randomWord.word);
+            playedWords.push(currentWord);
             localStorage.setItem('ahorcado-played-words', JSON.stringify(playedWords));
             
-            guessedLetters = [];
+            guessedLetters = new Set();
             wrongGuesses = 0;
             correctGuesses = 0;
             gameActive = true;
@@ -1104,7 +1098,6 @@
             const keyboard = document.getElementById('keyboard');
             keyboard.innerHTML = '';
             
-            // Distribución QWERTY en 3 filas
             const rows = [
                 'QWERTYUIOP',
                 'ASDFGHJKLÑ',
@@ -1116,11 +1109,12 @@
                 rowDiv.className = 'keyboard-row';
                 
                 for (let letter of row) {
+                    const normalizedLetter = normalizarLetra(letter);
                     const key = document.createElement('button');
                     key.className = 'key';
-                    key.textContent = letter;
-                    key.onclick = () => guessLetter(letter);
-                    key.id = 'key-' + letter;
+                    key.textContent = normalizedLetter;
+                    key.onclick = () => guessLetter(normalizedLetter);
+                    key.id = 'key-' + normalizedLetter;
                     rowDiv.appendChild(key);
                 }
                 
@@ -1135,7 +1129,7 @@
             for (let letter of currentWord) {
                 const box = document.createElement('div');
                 box.className = 'letter-box';
-                if (guessedLetters.includes(letter)) {
+                if (guessedLetters.has(letter)) {
                     box.textContent = letter;
                 }
                 display.appendChild(box);
@@ -1143,19 +1137,31 @@
         }
 
         function guessLetter(letter) {
-            if (!gameActive || guessedLetters.includes(letter)) return;
+            if (!gameActive || guessedLetters.has(letter)) return;
 
-            guessedLetters.push(letter);
-            const key = document.getElementById('key-' + letter);
-            key.classList.add('disabled');
+            const normalizedLetter = normalizarLetra(letter);
+            guessedLetters.add(normalizedLetter);
+            
+            const key = document.getElementById('key-' + normalizedLetter);
+            if (key) {
+                key.classList.add('disabled');
+            }
 
-            if (currentWord.includes(letter)) {
-                key.classList.add('correct');
+            let letterFound = false;
+            for (let wordLetter of currentWord) {
+                if (normalizarLetra(wordLetter) === normalizedLetter) {
+                    letterFound = true;
+                    break;
+                }
+            }
+
+            if (letterFound) {
+                if (key) key.classList.add('correct');
                 correctGuesses++;
                 document.getElementById('correct-count').textContent = correctGuesses;
                 playSound('correct');
             } else {
-                key.classList.add('wrong');
+                if (key) key.classList.add('wrong');
                 wrongGuesses++;
                 document.getElementById('wrong-count').textContent = wrongGuesses;
                 document.getElementById('attempts-left').textContent = maxWrong - wrongGuesses;
@@ -1169,11 +1175,10 @@
         }
 
         function updateUsedLetters() {
-            document.getElementById('used-letters').textContent = guessedLetters.join(', ');
+            document.getElementById('used-letters').textContent = Array.from(guessedLetters).sort().join(', ');
         }
 
         function drawHangman() {
-            // Ajustar tamaño del canvas según el ancho de la pantalla
             const canvas = document.getElementById('hangman-canvas');
             if (window.innerWidth <= 480) {
                 canvas.width = 200;
@@ -1187,45 +1192,39 @@
             }
             
             const ctx = canvas.getContext('2d');
-            const scale = canvas.width / 300; // Factor de escala basado en el tamaño original
+            const scale = canvas.width / 300;
             
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.lineWidth = 3 * scale;
             ctx.strokeStyle = '#2c3e50';
 
-            // Base
             ctx.beginPath();
             ctx.moveTo(20 * scale, 280 * scale);
             ctx.lineTo(180 * scale, 280 * scale);
             ctx.stroke();
 
-            // Poste vertical
             ctx.beginPath();
             ctx.moveTo(60 * scale, 280 * scale);
             ctx.lineTo(60 * scale, 20 * scale);
             ctx.stroke();
 
-            // Poste horizontal
             ctx.beginPath();
             ctx.moveTo(60 * scale, 20 * scale);
             ctx.lineTo(180 * scale, 20 * scale);
             ctx.stroke();
 
-            // Cuerda
             ctx.beginPath();
             ctx.moveTo(180 * scale, 20 * scale);
             ctx.lineTo(180 * scale, 50 * scale);
             ctx.stroke();
 
             if (wrongGuesses > 0) {
-                // Cabeza
                 ctx.beginPath();
                 ctx.arc(180 * scale, 70 * scale, 20 * scale, 0, Math.PI * 2);
                 ctx.stroke();
             }
 
             if (wrongGuesses > 1) {
-                // Torso
                 ctx.beginPath();
                 ctx.moveTo(180 * scale, 90 * scale);
                 ctx.lineTo(180 * scale, 160 * scale);
@@ -1233,7 +1232,6 @@
             }
 
             if (wrongGuesses > 2) {
-                // Brazo izquierdo
                 ctx.beginPath();
                 ctx.moveTo(180 * scale, 110 * scale);
                 ctx.lineTo(150 * scale, 140 * scale);
@@ -1241,7 +1239,6 @@
             }
 
             if (wrongGuesses > 3) {
-                // Brazo derecho
                 ctx.beginPath();
                 ctx.moveTo(180 * scale, 110 * scale);
                 ctx.lineTo(210 * scale, 140 * scale);
@@ -1249,7 +1246,6 @@
             }
 
             if (wrongGuesses > 4) {
-                // Pierna izquierda
                 ctx.beginPath();
                 ctx.moveTo(180 * scale, 160 * scale);
                 ctx.lineTo(150 * scale, 220 * scale);
@@ -1257,7 +1253,6 @@
             }
 
             if (wrongGuesses > 5) {
-                // Pierna derecha
                 ctx.beginPath();
                 ctx.moveTo(180 * scale, 160 * scale);
                 ctx.lineTo(210 * scale, 220 * scale);
@@ -1266,7 +1261,8 @@
         }
 
         function checkGameStatus() {
-            const wordComplete = currentWord.split('').every(letter => guessedLetters.includes(letter));
+            const uniqueLetters = new Set(currentWord.split('').map(l => normalizarLetra(l)));
+            const wordComplete = Array.from(uniqueLetters).every(letter => guessedLetters.has(letter));
 
             if (wordComplete) {
                 gameActive = false;
@@ -1284,7 +1280,7 @@
             const stats = document.getElementById('result-stats');
 
             if (won) {
-                title.textContent = 'GANASTE!';
+                title.textContent = '¡GANASTE!';
                 title.style.color = '#27ae60';
                 message.textContent = `Has acertado la palabra: ${currentWord}`;
                 playSound('win');
@@ -1348,15 +1344,19 @@
             resetGame();
         }
 
-        // Soporte para teclado físico
         document.addEventListener('keydown', (e) => {
             if (!gameActive) return;
             
-            let letter = e.key.toUpperCase().normalize('NFC');
+            const letter = normalizarLetra(e.key);
             
-            // Verificar si es una letra válida (A-Z o Ñ)
-            if ((letter.length === 1 && ((letter >= 'A' && letter <= 'Z') || letter === 'Ñ'))) {
+            if (letter.length === 1 && /^[A-ZÑÁÉÍÓÚ]$/.test(letter)) {
                 guessLetter(letter);
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            if (gameActive) {
+                drawHangman();
             }
         });
     </script>
